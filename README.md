@@ -47,3 +47,7 @@ elm reactor
 You can then open the link [http://localhost:8000/](http://localhost:8000/). As you can see, `elm-reactor` allowed us to launch a basic dev environment, and you can see the different folders for each step of the project. You can now start by going into the step 1.
 
 If you need a little reminder about the syntax, you can check [this cheat sheet](./syntax-help.md).
+
+---
+
+This workshop is originally from https://github.com/jgrenat/elm-workshop
