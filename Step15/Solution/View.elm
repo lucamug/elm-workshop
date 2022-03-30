@@ -1,7 +1,7 @@
 module Step15.Solution.View exposing (displayTestsAndView, view)
 
 import ElmEscapeHtml exposing (unescape)
-import Html exposing (Html, a, div, h1, h2, iframe, li, program, text, ul)
+import Html exposing (Html, a, div, h1, h2, iframe, li, text, ul)
 import Html.Attributes exposing (class, href, src, style)
 import Html.Events exposing (onClick)
 import Step15.Solution.Types exposing (..)
@@ -49,7 +49,7 @@ displayCategoriesPage categories =
 displayResultPage : Int -> Html Msg
 displayResultPage score =
     div [ class "score" ]
-        [ h1 [] [ text ("Your score: " ++ toString score ++ " / 5") ]
+        [ h1 [] [ text ("Your score: " ++ String.fromInt score ++ " / 5") ]
         , a [ class "btn btn-primary", href "#" ] [ text "Replay" ]
         ]
 
@@ -85,7 +85,7 @@ displayCategory : Category -> Html Msg
 displayCategory category =
     let
         path =
-            "#game/category/" ++ toString category.id
+            "#game/category/" ++ String.fromInt category.id
     in
     li []
         [ a [ class "btn btn-primary", href path ] [ text category.name ]
@@ -102,11 +102,119 @@ displayGame question =
 
 displayAnswer : String -> Html Msg
 displayAnswer answer =
-    li [] [ a [ class "btn btn-primary", onClick (AnswerQuestion answer) ] [ unescape answer |> text ] ]
+    li [] [ div [ class "btn btn-primary", onClick (AnswerQuestion answer) ] [ unescape answer |> text ] ]
 
 
-displayTestsAndView : Model -> Html Msg
+displayTestsAndView : Model -> List (Html Msg)
 displayTestsAndView model =
-    div []
-        [ div [ class "jumbotron" ] [ view model ]
+    [ div [ class "jumbotron" ] [ testStyles, view model ] ]
+
+
+testStyles : Html a
+testStyles =
+    Html.div []
+        [ Html.node "link"
+            [ Html.Attributes.rel "stylesheet"
+            , Html.Attributes.href "https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+            ]
+            []
+        , Html.node "style"
+            []
+            [ Html.text """
+
+body {
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 5vh;
+}
+
+.gameOptions {
+    text-align: center;
+}
+
+.gameOptions a {
+    display: block;
+    max-width: 300px;
+    margin: 1em auto 0;
+}
+
+.score {
+    text-align: center;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 366px);
+    grid-template-columns: repeat(auto-fit, minmax(366px, 1fr));
+    grid-gap: 20px;
+    padding: 0;
+    margin: auto;
+    text-align: center;
+    list-style-type: none;
+}
+
+.categories a {
+    width: 100%;
+    height: 100%;
+}
+
+.question {
+    text-align: center;
+    margin: auto auto 3em;
+}
+
+.answers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    max-width: 70%;
+    padding: 0;
+    margin: auto;
+    text-align: center;
+    list-style-type: none;
+}
+
+.answers a.btn {
+    color: white;
+}
+
+/*Trick to avoid elm-reactor errors to be centered, which is really not readable...*/
+div [style="display: block; white-space: pre; background-color: rgb(39, 40, 34); padding: 2em;"] {
+    text-align: left;
+}
+
+
+
+
+
+
+
+
+
+
+.test-pass {
+    color: #1e7e34;
+    margin-bottom: 20px;
+}
+
+.test-fail {
+    color: red;
+    margin-bottom: 20px;
+}
+
+.test-fail pre {
+    color: red;
+}
+
+#tests {
+    text-align: left;
+    height: 400px;
+    overflow: auto;
+    border: 1px solid gray;
+    margin: 20px;
+    padding: 20px;
+    
+}""" ]
         ]
