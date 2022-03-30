@@ -1,12 +1,15 @@
 module Step15.Solution.Types exposing (AnsweredQuestion, Category, Game, Model, Msg(..), Question, QuestionStatus(..), RemoteData(..), Route(..))
 
+import Browser exposing (Document, UrlRequest(..))
+import Browser.Navigation as Navigation exposing (Key)
 import Http exposing (Error)
-import Navigation exposing (Location)
+import Url exposing (Url)
 
 
 type alias Model =
     { categories : RemoteData (List Category)
     , route : Route
+    , key : Key
     }
 
 
@@ -14,7 +17,8 @@ type Msg
     = OnCategoriesFetched (Result Error (List Category))
     | OnQuestionsFetched (Result Error (List Question))
     | AnswerQuestion String
-    | OnLocationChange Location
+    | OnUrlRequest UrlRequest
+    | OnUrlChange Url
 
 
 type alias Category =

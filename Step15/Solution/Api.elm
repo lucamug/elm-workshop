@@ -24,22 +24,18 @@ categoriesDecoder =
 
 getCategoriesCommand : Cmd Msg
 getCategoriesCommand =
-    Http.send OnCategoriesFetched getCategoriesRequest
-
-
-getCategoriesRequest : Http.Request (List Category)
-getCategoriesRequest =
-    Http.get getCategoriesUrl categoriesDecoder
+    Http.get
+        { url = getCategoriesUrl
+        , expect = Http.expectJson OnCategoriesFetched categoriesDecoder
+        }
 
 
 getQuestionsCommand : Cmd Msg
 getQuestionsCommand =
-    Http.send OnQuestionsFetched getQuestionsRequest
-
-
-getQuestionsRequest : Http.Request (List Question)
-getQuestionsRequest =
-    Http.get getQuestionsUrl questionsDecoder
+    Http.get
+        { url = getQuestionsUrl
+        , expect = Http.expectJson OnQuestionsFetched questionsDecoder
+        }
 
 
 questionsDecoder : Decode.Decoder (List Question)

@@ -1,9 +1,11 @@
 module Step15.Solution.Update exposing (update)
 
-import Navigation
+import Browser
+import Browser.Navigation
 import Step15.Solution.Api exposing (getQuestionsCommand)
 import Step15.Solution.Routing exposing (parseLocation)
 import Step15.Solution.Types exposing (AnsweredQuestion, Category, Game, Model, Msg(..), Question, QuestionStatus(..), RemoteData(..), Route(..))
+import Url
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -48,7 +50,7 @@ update msg model =
                                 score =
                                     calculateScore answeredQuestions
                             in
-                            ( { model | route = ResultRoute score }, Navigation.newUrl ("#result/" ++ toString score) )
+                            ( { model | route = ResultRoute score }, Browser.Navigation.pushUrl model.key ("#result/" ++ String.fromInt score) )
 
                         newQuestion :: remainingQuestions ->
                             let
@@ -60,10 +62,10 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
-        OnLocationChange location ->
+        OnUrlChange url ->
             let
                 route =
-                    parseLocation location
+                    parseLocation url
 
                 command =
                     case route of
@@ -74,6 +76,21 @@ update msg model =
                             Cmd.none
             in
             ( { model | route = route }, command )
+
+        OnUrlRequest urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    case url.fragment of
+                        Nothing ->
+                            ( model, Cmd.none )
+
+                        Just _ ->
+                            ( model
+                            , Browser.Navigation.pushUrl model.key (Url.toString url)
+                            )
+
+                Browser.External href ->
+                    ( model, Browser.Navigation.load href )
 
 
 calculateScore : List AnsweredQuestion -> Int

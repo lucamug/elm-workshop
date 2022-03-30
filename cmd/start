@@ -1,0 +1,4 @@
+#!/bin/bash
+set -eu
+
+npx elm-go Step15/Solution/Main.elm --pushstate --start-page=200.html --dir=docs -- --output=docs/elm.js --debug

@@ -47,3 +47,28 @@ elm reactor
 You can then open the link [http://localhost:8000/](http://localhost:8000/). As you can see, `elm-reactor` allowed us to launch a basic dev environment, and you can see the different folders for each step of the project. You can now start by going into the step 1.
 
 If you need a little reminder about the syntax, you can check [this cheat sheet](./syntax-help.md).
+
+# Demo App
+
+This is the app that we will build together:
+
+* https://elm-workshop.surge.sh/
+* https://elm-workshop.surge.sh/debug.html (with Elm Debugger activated)
+
+# Ellie versions
+
+Some of the steps are also available in Ellie, so they can be used without the need to prepare the development environment. We still suggest to install the environment locally as explained above, as it would provide a more authentic "Elm experience".
+
+* Step 1: https://ellie-app.com/h57cXjNpR73a1
+* Step 2: https://ellie-app.com/h57dzCjx6yNa1
+* Step 3: https://ellie-app.com/h57f277JzDDa1
+* Step 4: https://ellie-app.com/h57gLYQrsz8a1
+* Step 5: https://ellie-app.com/h57fWVR3ws7a1
+* Step 6: https://ellie-app.com/h57h9yVJzmza1
+* Step 7: https://ellie-app.com/h57jJtRJdXda1
+
+
+
+
+
+ 

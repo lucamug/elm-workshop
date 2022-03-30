@@ -1,7 +1,7 @@
 # Solution
 
-L'essentiel des modifications se trouvent :
+The main changes are:
 
- - Dans le fichier `View.elm`, on a rajouté un `onClick` sur les réponses 
- - Dans `Types.elm` on a donc rajouté l'évènement `AnswerQuestion` correspondant
- - Dans `Update.elm` on traite ce nouvel évènement ; c'est le plus grand changement, prenez le temps de bien le regarder pour tout comprendre !
+  - In the `View.elm` file, we added an `onClick` on the responses
+  - In `Types.elm` we have therefore added the corresponding `AnswerQuestion` event
+  - In `Update.elm` we process this new event; this is the biggest change, take the time to look at it to understand everything!
