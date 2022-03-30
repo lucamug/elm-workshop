@@ -7,6 +7,7 @@ import Html exposing (Html, div, h1, input, label, p, text)
 import Html.Attributes exposing (class, for, id, name, type_)
 import Html.Events exposing (onClick)
 import Http exposing (expectString)
+import ProgramTest
 import Random
 import Result exposing (Result)
 import Test
@@ -14,7 +15,6 @@ import Test.Html.Event
 import Test.Html.Query
 import Test.Html.Selector
 import Test.Runner.Html
-import TestContext
 
 
 main : Program () Model Msg
@@ -207,14 +207,42 @@ categoriesUrl =
     "https://opentdb.com/api_category.php"
 
 
-categoriesPageProgram : TestContext.TestContext Msg Model (Cmd Msg)
+
+-- categoriesPageProgram : ProgramTest.ProgramDefinition Msg Model (Cmd Msg)
+-- categoriesPageProgram : ProgramTest.ProgramDefinition () Model Msg ()
+--
+-- Browser.element
+--     { init = \_ -> init
+--     , update = update
+--     , view = displayTestsAndView
+--     , subscriptions = \model -> Sub.none
+--     }
+
+
+categoriesPageProgram : ProgramTest.ProgramDefinition () Model Msg (Cmd Msg)
 categoriesPageProgram =
-    TestContext.createWithSimulatedEffects
-        { init = init
+    ProgramTest.createElement
+        { init = \_ -> init
         , update = update
         , view = view
-        , deconstructEffect = \_ -> [ TestContext.HttpRequest { method = "get", url = categoriesUrl } ]
+
+        -- update : Msg -> Model -> ( Model, Cmd Msg )
+        -- , deconstructEffect = \_ -> [ HttpRequest { method = "get", url = categoriesUrl } ]
         }
+
+
+
+-- |> ProgramTest.withSimulatedEffects
+--     (\_ ->
+--         [ SimulatedEffect.Http.get { url = categoriesUrl }
+--         ]
+--     )
+-- main : Html a
+-- main =
+--     div []
+--         [ testStyles
+--         , viewResults (Random.initialSeed 1000 |> defaultConfig |> hidePassedTests) suite
+--         ]
 
 
 suite : Test.Test
@@ -249,7 +277,8 @@ whenTheCategoriesAreLoadingAMessageShouldSaySo =
     Test.test "When the request is loading, the following message should be displayed: \"Loading the categories...\"" <|
         \() ->
             categoriesPageProgram
-                |> TestContext.expectViewHas [ Test.Html.Selector.containing [ Test.Html.Selector.text "Loading the categories..." ] ]
+                |> ProgramTest.start ()
+                |> ProgramTest.expectViewHas [ Test.Html.Selector.containing [ Test.Html.Selector.text "Loading the categories..." ] ]
 
 
 whenInitRequestFailTheCategoriesShouldBeOnError : Test.Test
@@ -268,8 +297,9 @@ whenInitRequestFailThereShouldBeAnError =
     Test.test "When the request fails, the following error message should be displayed: \"An error occurred while loading the categories\"" <|
         \() ->
             categoriesPageProgram
-                |> TestContext.update (OnCategoriesFetched (Err Http.NetworkError))
-                |> TestContext.expectViewHas [ Test.Html.Selector.containing [ Test.Html.Selector.text "An error occurred while loading the categories" ] ]
+                |> ProgramTest.start ()
+                |> ProgramTest.update (OnCategoriesFetched (Err Http.NetworkError))
+                |> ProgramTest.expectViewHas [ Test.Html.Selector.containing [ Test.Html.Selector.text "An error occurred while loading the categories" ] ]
 
 
 whenInitRequestCompletesTheModelShouldBeUpdated : Test.Test
@@ -288,5 +318,6 @@ whenInitRequestCompletesTheResultShouldBeDisplayed =
     Test.fuzz Fuzz.string "When the request completes, the resulting string should be displayed" <|
         \randomResponse ->
             categoriesPageProgram
-                |> TestContext.update (OnCategoriesFetched (Ok randomResponse))
-                |> TestContext.expectViewHas [ Test.Html.Selector.containing [ Test.Html.Selector.text randomResponse ] ]
+                |> ProgramTest.start ()
+                |> ProgramTest.update (OnCategoriesFetched (Ok randomResponse))
+                |> ProgramTest.expectViewHas [ Test.Html.Selector.containing [ Test.Html.Selector.text randomResponse ] ]

@@ -1,15 +1,18 @@
 module Step08.Tests.Tests exposing (main)
 
+-- import TestContext exposing (SimulatedEffect(..), TestContext, createWithSimulatedEffects, expectViewHas, update)
+
 import Expect
 import Fuzz
 import Html exposing (Html, div)
 import Http exposing (Error(..))
+import ProgramTest
 import Random
+import SimulatedEffect.Http
 import Step08.CategoriesPage as CategoriesPage exposing (Model, Msg(..), RemoteData(..))
 import Test exposing (Test, concat, fuzz, test)
 import Test.Html.Selector as Selector
 import Test.Runner.Html exposing (defaultConfig, hidePassedTests, viewResults)
-import TestContext exposing (SimulatedEffect(..), TestContext, createWithSimulatedEffects, expectViewHas, update)
 import Utils.Utils exposing (testStyles)
 
 
@@ -18,14 +21,25 @@ categoriesUrl =
     "https://opentdb.com/api_category.php"
 
 
-categoriesPageProgram : TestContext Msg Model (Cmd Msg)
+categoriesPageProgram : ProgramTest.ProgramDefinition () Model Msg (Cmd Msg)
 categoriesPageProgram =
-    createWithSimulatedEffects
-        { init = CategoriesPage.init
+    ProgramTest.createElement
+        { init = \_ -> CategoriesPage.init
         , update = CategoriesPage.update
         , view = CategoriesPage.view
-        , deconstructEffect = \_ -> [ HttpRequest { method = "get", url = categoriesUrl } ]
+
+        -- TODO
+        -- Add this back:
+        -- , deconstructEffect = \_ -> [ HttpRequest { method = "get", url = categoriesUrl } ]
         }
+
+
+
+-- |> ProgramTest.withSimulatedEffects
+--     (\_ ->
+--         [ SimulatedEffect.Http.get { url = categoriesUrl }
+--         ]
+--     )
 
 
 main : Html a
@@ -68,7 +82,8 @@ whenTheCategoriesAreLoadingAMessageShouldSaySo =
     test "When the request is loading, the following message should be displayed: \"Loading the categories...\"" <|
         \() ->
             categoriesPageProgram
-                |> expectViewHas [ Selector.containing [ Selector.text "Loading the categories..." ] ]
+                |> ProgramTest.start ()
+                |> ProgramTest.expectViewHas [ Selector.containing [ Selector.text "Loading the categories..." ] ]
 
 
 whenInitRequestFailTheCategoriesShouldBeOnError : Test
@@ -87,8 +102,9 @@ whenInitRequestFailThereShouldBeAnError =
     test "When the request fails, the following error message should be displayed: \"An error occurred while loading the categories\"" <|
         \() ->
             categoriesPageProgram
-                |> update (OnCategoriesFetched (Err NetworkError))
-                |> expectViewHas [ Selector.containing [ Selector.text "An error occurred while loading the categories" ] ]
+                |> ProgramTest.start ()
+                |> ProgramTest.update (OnCategoriesFetched (Err NetworkError))
+                |> ProgramTest.expectViewHas [ Selector.containing [ Selector.text "An error occurred while loading the categories" ] ]
 
 
 whenInitRequestCompletesTheModelShouldBeUpdated : Test
@@ -107,5 +123,6 @@ whenInitRequestCompletesTheResultShouldBeDisplayed =
     fuzz Fuzz.string "When the request completes, the resulting string should be displayed" <|
         \randomResponse ->
             categoriesPageProgram
-                |> update (OnCategoriesFetched (Ok randomResponse))
-                |> expectViewHas [ Selector.containing [ Selector.text randomResponse ] ]
+                |> ProgramTest.start ()
+                |> ProgramTest.update (OnCategoriesFetched (Ok randomResponse))
+                |> ProgramTest.expectViewHas [ Selector.containing [ Selector.text randomResponse ] ]

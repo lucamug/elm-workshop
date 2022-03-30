@@ -66,6 +66,7 @@ Some of the steps are also available in Ellie, so they can be used without the n
 * Step 5: https://ellie-app.com/h57fWVR3ws7a1
 * Step 6: https://ellie-app.com/h57h9yVJzmza1
 * Step 7: https://ellie-app.com/h57jJtRJdXda1
+* Step 8: https://ellie-app.com/h5xp77MdNmRa1
 
 
 
