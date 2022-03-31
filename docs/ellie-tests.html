@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="shortcut icon" size="16x16, 32x32, 48x48, 64x64, 128x128, 256x256" href="/favicon.ico">
+    <!-- Primary Meta Tags -->
+    <title>elm-workshop</title>
+    <meta name="title" content="elm-workshop">
+    <meta name="description" content='An Elm Workshop to learn the basics of the language.'>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://elm-workshop.surge.sh/">
+    <meta property="og:title" content="elm-workshop">
+    <meta property="og:description" content='An Elm Workshop to learn the basics of the language.'>
+    <meta property="og:image" content="https://elm-workshop.surge.sh/elm-workshop.jpg">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://elm-workshop.surge.sh/">
+    <meta property="twitter:title" content="elm-workshop">
+    <meta property="twitter:description" content='An Elm Workshop to learn the basics of the language.'>
+    <meta property="twitter:image" content="https://elm-workshop.surge.sh/elm-workshop.jpg">
+</head>
+
+<body>
+    <div id="elm"></div>
+    <script src="/elm.js"></script>
+    <script>
+        app = Elm[Object.keys(Elm)[0]][Object.keys(Elm[Object.keys(Elm)[0]])[0]].init({
+            node: elm
+        });
+    </script>
+</body>
+
+</html>

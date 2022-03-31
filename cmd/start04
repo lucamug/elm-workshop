@@ -1,0 +1,4 @@
+#!/bin/bash
+set -eu
+
+printf "\n\nFor ./Ellies/Step04.elm please use \"elm reactor\".\n\n"

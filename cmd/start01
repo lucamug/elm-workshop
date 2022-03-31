@@ -1,0 +1,6 @@
+#!/bin/bash
+set -eu
+
+printf "\n\nEdit ./Ellies/Step01.elm and see the changes in the browser\n\n"
+npx elm-go Ellies/Step01.elm --pushstate --hot --start-page=ellie-tests.html --dir=docs -- --output=docs/elm.js --debug
+
